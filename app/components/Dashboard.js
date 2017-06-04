@@ -6,6 +6,7 @@ import {
   Image,
   TouchableHighlight
 } from 'react-native';
+import Profile from './Profile';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -17,7 +18,11 @@ class Dashboard extends Component {
   }
 
   goToProfile() {
-    console.log('going to profile');
+    this.props.navigator.push({
+      component: Profile,
+      title: 'Profile Page',
+      passProps: {userInfo: this.props.userInfo}
+    });
   }
 
   goToRepos() {
