@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import Badge from './Badge';
 import Seperator from './Seperator';
+import RepoWebView from './RepoWebView';
 
 class Repositories extends Component {
   constructor(props) {
@@ -17,24 +18,28 @@ class Repositories extends Component {
 
   openPage(url) {
     return () => {
-      console.log(url);
+      this.props.navigator.push({
+        component: RepoWebView,
+        title: 'Web View',
+        passProps: { url }
+      });
     }
   }
 
   render() {
     const { repos, userInfo } = this.props;
-    const list = repos.map((item, index) => {
-      var desc = repos[index].description ? <Text style={styles.description}>{repos[index].description}</Text> : <View />;
+    const list = repos.map((repo, index) => {
+      var desc = repo.description ? <Text style={styles.description}>{repo.description}</Text> : <View />;
       
       return (
         <View key={index}>
           <View style={styles.rowContainer}>
             <TouchableHighlight
-              onPress={this.openPage(repos[index].html_url)}
+              onPress={this.openPage(repo.html_url)}
               underlayColor='transparent'>
-                <Text style={styles.name}>{repos[index].name}</Text>
+                <Text style={styles.name}>{repo.name}</Text>
               </TouchableHighlight>
-              <Text style={styles.stars}> Stars: {repos[index].stargazers_count}</Text>
+              <Text style={styles.stars}> Stars: {repo.stargazers_count}</Text>
               {desc}
           </View>
           <Seperator />

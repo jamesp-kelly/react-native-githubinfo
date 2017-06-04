@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Profile from './Profile';
 import Repositories from './Repositories';
+import Notes from './Notes';
 import api from '../utils/api';
 
 class Dashboard extends Component {
@@ -42,7 +43,18 @@ class Dashboard extends Component {
   }
 
   goToNotes() {
-    console.log('going to notes');
+    api.getNotes(this.props.userInfo.login)
+      .then((res) => {
+        res = res || {};
+        this.props.navigator.push({
+          component: Notes,
+          title: 'Notes',
+          passProps: {
+            notes: res,
+            userInfo: this.props.userInfo
+          }
+        })
+      });
   }
 
   generateBackgroundStyle(btn) {
