@@ -7,25 +7,24 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  StyleSheet,
-  NavigatorIOS
+  StyleSheet
 } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
 import Main from './app/components/Main';
+import Dashboard from './app/components/Dashboard';
+import Profile from './app/components/Profile';
+import Repositories from './app/components/Repositories';
+import Notes from './app/components/Notes';
 
-export default class githubNotetaker extends Component {
-  render() {
-    return (
-      <NavigatorIOS 
-        style={styles.container}
-        initialRoute={{
-          title: 'Github Notetaker',
-          component: Main
-        }}
-      />
-    );
-  }
-}
+
+const noteTakerApp = StackNavigator({
+  Home: { screen: Main},
+  Dashboard: { screen: Dashboard },
+  Profile: { screen: Profile },
+  Repositories: { screen: Repositories },
+  Notes: { screen: Notes }
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -34,4 +33,4 @@ const styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('githubNotetaker', () => githubNotetaker);
+AppRegistry.registerComponent('githubNotetaker', () => noteTakerApp);

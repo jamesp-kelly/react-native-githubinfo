@@ -14,9 +14,10 @@ import Badge from './Badge';
 class Notes extends Component {
   constructor(props) {
     super(props);
+    this.navParams = this.props.navigation.state.params;
     this.ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
     this.state = {
-      dataSource: this.ds.cloneWithRows(this.props.notes),
+      dataSource: this.ds.cloneWithRows(this.navParams.notes),
       note: '',
       error: ''
     };
@@ -25,6 +26,10 @@ class Notes extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderRow = this.renderRow.bind(this);
   }
+
+  static navigationOptions = {
+    title: 'Notes'
+  };
 
   handleSearchInputChange(e) {
     const note = e.nativeEvent.text;
@@ -37,9 +42,9 @@ class Notes extends Component {
       note: ''
     });
 
-    api.addNote(this.props.userInfo.login, note)
+    api.addNote(this.navParams.userInfo.login, note)
       .then((data) => {
-        api.getNotes(this.props.userInfo.login)
+        api.getNotes(this.navParams.userInfo.login)
           .then((data) => {
             this.setState({
               dataSource: this.ds.cloneWithRows(data)
@@ -82,12 +87,13 @@ class Notes extends Component {
   }
 
   render() {
+    const { params } = this.props.navigation.state;
     return (
       <View style={styles.container}>
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this.renderRow}
-          renderHeader={() => <Badge userInfo={this.props.userInfo} />}
+          renderHeader={() => <Badge userInfo={params.userInfo} />}
         />
         {this.footer()}
       </View>
@@ -95,10 +101,10 @@ class Notes extends Component {
   }
 }
 
-Notes.propTypes = {
-  userInfo: PropTypes.object.isRequired,
-  notes: PropTypes.object.isRequired
-};
+// Notes.propTypes = {
+//   userInfo: PropTypes.object.isRequired,
+//   notes: PropTypes.object.isRequired
+// };
 
 const styles = StyleSheet.create({
   container: {

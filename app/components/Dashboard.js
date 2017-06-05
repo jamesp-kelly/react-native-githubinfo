@@ -14,46 +14,43 @@ import api from '../utils/api';
 class Dashboard extends Component {
   constructor(props) {
     super(props);
+    this.navParams = this.props.navigation.state.params;
     this.goToProfile = this.goToProfile.bind(this);
     this.goToRepos = this.goToRepos.bind(this);
     this.goToNotes = this.goToNotes.bind(this);
     this.generateBackgroundStyle = this.generateBackgroundStyle.bind(this);
   }
 
+  static navigationOptions = ({ navigation }) => ({
+    title: navigation.state.params.userInfo.name,
+  });
+
+
   goToProfile() {
-    this.props.navigator.push({
-      component: Profile,
-      title: 'Profile Page',
-      passProps: {userInfo: this.props.userInfo}
+    this.props.navigation.navigate('Profile', {
+      userInfo: this.navParams.userInfo
     });
   }
 
   goToRepos() {
-    api.getRepos(this.props.userInfo.login)
+    api.getRepos(this.navParams.userInfo.login)
       .then((res) => {
-        this.props.navigator.push({
-          component: Repositories,
-          title: 'Repos',
-          passProps: {
-            userInfo: this.props.userInfo,
-            repos: res
-          }
+        this.props.navigation.navigate('Repositories', { 
+          userInfo: this.navParams.userInfo,
+          repos: res
         });
       });
   }
 
   goToNotes() {
-    api.getNotes(this.props.userInfo.login)
+    api.getNotes(this.navParams.userInfo.login)
       .then((res) => {
         res = res || {};
-        this.props.navigator.push({
-          component: Notes,
-          title: 'Notes',
-          passProps: {
-            notes: res,
-            userInfo: this.props.userInfo
-          }
-        })
+        debugger;
+        this.props.navigation.navigate('Notes', {
+          notes: res,
+          userInfo: this.navParams.userInfo
+        });
       });
   }
 
@@ -85,9 +82,10 @@ class Dashboard extends Component {
   }
 
   render() {
+    const { params } = this.props.navigation.state;
     return (
       <View style={styles.container}>
-        <Image source={{uri: this.props.userInfo.avatar_url}} style={styles.image} />
+        <Image source={{uri: params.userInfo.avatar_url}} style={styles.image} />
         
         <TouchableHighlight
           onPress={this.goToProfile}
@@ -117,7 +115,6 @@ class Dashboard extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 65,
     flex: 1
   },
   image: {

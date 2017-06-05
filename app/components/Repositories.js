@@ -16,6 +16,10 @@ class Repositories extends Component {
     this.openPage = this.openPage.bind(this);
   }
 
+  static navigationOptions = {
+    title: 'Repositories'
+  };
+
   openPage(url) {
     return () => {
       this.props.navigator.push({
@@ -27,8 +31,9 @@ class Repositories extends Component {
   }
 
   render() {
-    const { repos, userInfo } = this.props;
-    const list = repos.map((repo, index) => {
+    const { params } = this.props.navigation.state;
+
+    const list = params.repos.map((repo, index) => {
       var desc = repo.description ? <Text style={styles.description}>{repo.description}</Text> : <View />;
       
       return (
@@ -44,22 +49,22 @@ class Repositories extends Component {
           </View>
           <Seperator />
         </View>
-      )
+      );
       
     });
     return (
       <ScrollView style={styles.container}>
-        <Badge userInfo={userInfo} />
+        <Badge userInfo={params.userInfo} />
         {list}
       </ScrollView>
     );
   }
 }
 
-Repositories.propTypes = {
-  userInfo: React.PropTypes.object.isRequired,
-  repos: React.PropTypes.array.isRequired
-};
+// Repositories.propTypes = {
+//   userInfo: React.PropTypes.object.isRequired,
+//   repos: React.PropTypes.array.isRequired
+// };
 
 const styles = StyleSheet.create({
   container: {

@@ -25,6 +25,11 @@ class Main extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  static navigationOptions = {
+    title: 'Github Notetaker',
+  };
+
+
   handleChange(event) {
     this.setState({
       username: event.nativeEvent.text
@@ -32,7 +37,6 @@ class Main extends Component {
   }
 
   handleSubmit() {
-    //use spinner
     this.setState({
       isLoading: true
     });
@@ -44,11 +48,7 @@ class Main extends Component {
             isLoading: false
           });
         } else {
-          this.props.navigator.push({
-            title: response.name || 'Select an Option',
-            component: Dashboard,
-            passProps: {userInfo: response}
-          });
+          this.props.navigation.navigate('Dashboard', { userInfo: response });
           this.setState({
             isLoading: false,
             error: false,
@@ -56,9 +56,6 @@ class Main extends Component {
           });
         }
       });
-    //fetch data from github
-    //reroute to the next route, passing that github info
-    console.log('SUBMIT', this.state.username);
   }
 
   render() {
@@ -96,7 +93,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     padding: 30,
-    marginTop: 65,
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: '#48bbec'

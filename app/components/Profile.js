@@ -6,24 +6,29 @@ import Seperator from './Seperator';
 
 class Profile extends Component {
 
+  static navigationOptions = {
+    title: 'Profile'
+  };
+
   getRowTitle(user, item) {
     item = (item === 'public_repos') ? item.replace('_', ' ') : item;
     return item[0] ? item[0].toUpperCase() + item.slice(1) : item;
   }
 
   render() {
-    const { userInfo } = this.props;
+    const { params } = this.props.navigation.state;
+
     var topicArr = ['company', 'location', 'followers', 'following', 'email', 'bio', 'public_repos'];
 
     const list = topicArr.map((item, index) => {
-      if (!userInfo[item]) {
+      if (!params.userInfo[item]) {
         return <View key={index}></View>
       } else {
         return (
           <View key={index}>
             <View style={styles.rowContainer}>
-              <Text style={styles.rowTitle}>{this.getRowTitle(userInfo, item)}</Text>
-              <Text style={styles.rowContent}>{userInfo[item]}</Text>
+              <Text style={styles.rowTitle}>{this.getRowTitle(params.userInfo, item)}</Text>
+              <Text style={styles.rowContent}>{params.userInfo[item]}</Text>
             </View>
             <Seperator />
           </View>
@@ -33,7 +38,7 @@ class Profile extends Component {
 
     return (
       <ScrollView>
-        <Badge userInfo={userInfo}></Badge>
+        <Badge userInfo={params.userInfo}></Badge>
         {list}
       </ScrollView>
     );
